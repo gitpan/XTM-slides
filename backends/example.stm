@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<slides name="Internet Technology II, 2001" 
+	xmlns = "http://topicmaps.bond.edu.au/SlideML/"
+        xmlns:astma = "http://topicmaps.bond.edu.au/astma/1.0/"
+        xmlns:smile = "http://topicmaps.bond.edu.au/smile/1.0/">
+
+  <institution>Bond University</institution>
+  <caption>Internet Technology II, 2001</caption>
+  <title>Internet Technology II
+Test</title>
+  <author>Robert Barta  <email>rho@bond.edu.au</email></author>
+
+  <astma:default astma:tau_expr="file:235.atm"/>
+
+  <astma:slide astma:tid="web-programming" astma:continue="yes"/>
+
+  <astma:slide astma:tid="client-side-programming-technology"/>
+
+  <astma:slide astma:tid="client-side-presentation-technology" astma:format="%ti %in"/>
+
+  <astma:slide astma:tid="php"/>
+
+  <astma:slide astma:tid="xy" astma:format="%ti %rd %in"/>
+
+</slides>

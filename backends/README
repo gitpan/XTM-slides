@@ -1,0 +1,19 @@
+This directory contains some infrastructure to convert SMiLe XML documents
+into other formats:
+
+  - html (single HTML page)
+  - prosper (LaTeX slide style)
+
+More formats should be added here.
+
+The Makefile in this directory should give you an idea how things are
+related. What I am doing here is to copy the Makefile into my own
+slides directory together with the backends directory and run
+
+  make myslide.html MAPS=file:~/where/are/maps/ BASE=~/backends/ HTMLSTYLE="'styles/plain.css'"
+
+or
+
+  make myslide.pdf  MAPS=file:~/where/are/maps/ BASE=~/backends/ HTMLSTYLE="'styles/plain.css'"
+
+

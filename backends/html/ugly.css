@@ -1,0 +1,10 @@
+  body            { background-color: white; }
+  .slideheader    { color: green; font-weight: bold; font-size: 12pt; 
+                    text-align: center; background-color: #99FF99; }
+  .slideseparator { blue; }
+  .blocktext      { background-color: yellow; }
+  .bullettext     { background-color: red; }
+  .header         { text-align: center; }
+  .slides         { align: center; }
+  table           { border: double; width: 100%; }
+  .slide          {  }

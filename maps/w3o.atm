@@ -1,0 +1,33 @@
+w3c:iso-8859-1
+
+w3c-activity (activity)
+
+w3c (consortium)
+bn: World Wide Web Consortium
+oc: http://www.w3.org/
+
+w3c-activity (standardization-activity)
+bn: W3C Activity
+
+w3c-user-interface (w3c-activity)
+bn: User Interface Activity
+in: HTML, CSS1/2, XSL-FO/XSLT, WAI, SVG, I18N
+oc: http://www.w3c.org/
+oc: http://www.w3c2.org/
+oc: http://www.w3c3.org/
+
+test1 (w3c-user-interface)
+
+test2 (w3c-user-interface)
+
+test3 (w3c-user-interface)
+
+w3c-society (w3c-activity)
+bn: Society related Activity
+in: PICS, P3P, e-Commerce, DSIG, XML-SIG
+
+w3c-architecture (w3c-activity)
+bn: Architecture Activity
+in: HTTP, DOM, RDF
+
+

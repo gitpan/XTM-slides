@@ -1,0 +1,23 @@
+xmlns:smile='http://topicmaps.bond.edu.au/SlideML/'
+
+<!ELEMENT slide     (title|types|inlines|instances|references)*>
+<!ATTLIST slide     title CDATA #REQUIRED
+                    topic CDATA #REQUIRED>
+
+<!ELEMENT title     #PCDATA>
+
+<!ELEMENT types     (type+|#PCDATA)>
+<!ELEMENT type      #PCDATA>
+
+<!ELEMENT inlines   (inline+|#PCDATA)>
+<!ELEMENT inline    #PCDATA>
+
+<!ELEMENT instances (instance+|#PCDATA)>
+<!ELEMENT instance  (description|#PCDATA)>
+
+<!ELEMENT references reference+>
+<!ELEMENT reference EMPTY>
+<!ATTLIST reference href  CDATA #REQUIRED
+                    type  CDATA 'simple' #FIXED>
+
+]

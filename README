@@ -1,0 +1,63 @@
+XTM::slides
+-----------
+
+This base package contains Perl extension interfaces for 
+generating slides from Topic Maps
+
+   http://www.topicmaps.org/
+
+To build the extensions, unpack this distribution somewhere, and
+exercise the usual incantation:
+
+perl Makefile.PL
+make
+make test
+make install
+
+There are a lot of other packages we rely on, so be prepared to
+install a few; or use the cpan frontend doing that for you.
+
+Setup
+-----
+
+Currently the setup is simple:
+
+  - A Perl binary (stm2sml.pl) will be installed in the INSTALLBIN directory. 
+    Plz consult its documentation. It will read an .stm file, will read all 
+    Topic Maps mentioned therein and will generate an XML representation
+    of this slide show (yes, yet another XML language, it is described via
+    a DTD in the docs directory).
+
+  - After you have created this SlideML XML document you should look into the 
+    utils directory how to postprocess this for various backends. Currently the
+    package supports
+
+        - LaTeX with Prosper to produce PDF slides
+
+        - HTML
+
+    You will need XSLT support from
+
+      http://xmlsoft.org/#XSLT
+
+    and install libxml2 and libxslt together with xsltproc.
+
+    Have a look at the Makefile there to get the idea. If you have LaTeX installed,
+    a
+
+      make http.pdf
+
+    should work.
+
+
+Let me know whether I forgot a dependency on some other package.
+
+As many people are working on slide support for Perl, the above might change 
+readically.
+
+
+
+Copyright 2001,2002 Robert Barta
+
+This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
