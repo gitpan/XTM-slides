@@ -7,6 +7,8 @@ lib/XTM/Smile.pm
 lib/XTM/Smile/SAX.pm
 maps/w3o.atm
 docs/SlideML.dtd
+docs/guide.dbk
+docs/guide.html
 t/02sax.t
 backends/Makefile
 backends/README

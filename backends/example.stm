@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml version="1.0" encoding="ASCII" standalone="yes"?>
 <slides name="Internet Technology II, 2001" 
 	xmlns = "http://topicmaps.bond.edu.au/SlideML/"
         xmlns:astma = "http://topicmaps.bond.edu.au/astma/1.0/"
@@ -21,5 +21,14 @@ Test</title>
   <astma:slide astma:tid="php"/>
 
   <astma:slide astma:tid="xy" astma:format="%ti %rd %in"/>
+
+  <!-- first slide, no detailed specification, so the default format will be used -->
+  <astma:slide astma:tid="web-programming"/>
+
+  <!-- second slide, explicit format, first three instances -->
+  <astma:slide astma:tid="client-side-presentation-technology" astma:format="%ti %in[1-2]"/>
+
+  <!-- same but as a followup slide, all other instances -->
+  <astma:slide astma:tid="client-side-presentation-technology" astma:format="%ti %in[3-]" astma:continue="yes"/>
 
 </slides>

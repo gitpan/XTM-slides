@@ -55,7 +55,7 @@ my $default_format = "%ti %ty %rd %ins %res";
 
   use XTM::Smile::SAX;
   my $expander = new XTM::Smile::SAX   (tmbase => 'file:/where/are/the/maps/');
-  my $parser  = find a SAX parser here (Handler => $expander);
+  my $parser   = find any SAX2 parser  (Handler => $expander);
   $parser->parse_string($XML);
 
 =head1 DESCRIPTION
@@ -99,99 +99,7 @@ Example:
      ...
   </some_document>
 
-
-Following incoming tags are detected:
-
-=over
-
-=item C<slide>: 
-
-This signals the begin of a slide. 
-
-=over 
-
-=item 
-
-The mandatory attribute is C<tid>, which must contain a topic id. 
-If this particular topic does not exist in the current topic map, an error is
-flagged. 
-
-=item 
-
-Optionally, the attribute C<format> can be used to control the content of
-this slide.
-
-=back
-
-=item C<default>: 
-
-With this tag, default values can be set via attributes which apply to
-all slides which may follow this tag:
-
-=over
-
-=item C<map>: 
-
-The value of this attribute will be interpreted as tau expression according to XTM::Virtual.
-
-=item C<format>: 
-
-This format will be used to control B<what> every slide will contain from the topic.
-This format can be overridden for every individual slide. Formats are described below.
-
-=back
-
-=back
-
-=head2 Formats
-
-A format string describes B<what> exactly should be included in the generated slide.
-The default format is
-
-  "%ti %ty %rd %ins %res"
-
-and takes care that a C<title>, C<types>, C<inlines>, C<instances> and C<references>
-are included on a slide in this particular order.
-
-One format specifier is introduced with a '%' character, several such specifiers are
-separated bu one or more blanks. Following specifiers are honored:
-
-=over
-
-=item C<ti>:
-
-Include a C<title> tag containing the title of the slide. This is generated from the baseName of the topic.
-(Sorry, no scoping yet)
-
-=item C<ty> and C<tys>:
-
-This includes the types (instanceOf, to be exact) of the topic enclosed by a C<types> tag. In case
-of C<ty>, every instanceOf is embedded with its own C<type> tag. In case of C<tys> all these instanceOfs
-are concatenated to one string separated by ','.
-
-=item C<rd> and C<rds>:
-
-This includes the resourceData occurrences enclosed by the tag C<inlines>. In case of C<rd>,
-every such occurrence is wrapped into its own tag, C<inline>. In case of C<rds>, all strings
-are concatenated into one character string (again, separated by ',').
-
-=item C<in>, C<ins> and C<inrds>:
-
-This includes the instances of this topic using the tag C<instances>. In case of C<in>, the
-individual instances are wrapped into separate C<instance> tags. In case of C<ins>, they
-are concatenated via ',' into one string. C<inrds> behaves like C<in> except that for every
-individual instance also its resourceData is included via nested C<description> tags.
-
-=item C<res>
-
-This includes the resourceRef occurrences via a C<references> tag. Every
-individual occurrence is included via a C<reference> tag. This tag is empty,
-but contains an C<xlink:href> attribute containing the reference link.
-
-
-
-
-=back
+For a listing of incoming and outgoing elements, please refer to the documentation in the docs directory.
 
 =head1 INTERFACE
 

@@ -3,7 +3,7 @@ use strict;
 use Data::Dumper;
 use Test::More 
   #qw(no_plan); 
-  tests => 42; 
+  tests => 51;
 
 my $map = "file:w3o.atm";
 
@@ -129,6 +129,16 @@ foreach my $n (1..3) {
     is (@{ $xp->find ('/slides/smile:slide//smile:reference')},       $m-$n+1, 'references');
     is (@{ $xp->find ('/slides/smile:slide//smile:instance')},        $m-$n+1, 'instances');
   }
+}
+
+foreach my $n (1..3) {
+  $xp = mytest (qq|
+		  <astma:default astma:tau_expr="$map"/>
+		  <astma:slide astma:tid="w3c-user-interface" astma:format="%in[$n-] %res[$n-]"/>
+|);
+    is (@{ $xp->find ('/slides/smile:slide')},                        1, "single slide, [$n-]");
+    is (@{ $xp->find ('/slides/smile:slide//smile:reference')},       3-$n+1, 'references');
+    is (@{ $xp->find ('/slides/smile:slide//smile:instance')},        4-$n+1, 'instances');
 }
 
 __END__

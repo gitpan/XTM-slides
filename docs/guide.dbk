@@ -1,0 +1,393 @@
+<?xml version='1.0'?>
+<article>
+<artheader>
+  <title>Generating Slides From Topic Maps</title>
+  <author><firstname>Robert</firstname><surname>Barta</surname></author>
+  <affiliation>
+    <address><email>rho@bond.edu.au</email></address>
+  </affiliation>
+  <copyright>
+    <year>2002</year>
+    <holder role="mailto:rho@bond.edu.au">Robert Barta</holder>
+  </copyright>
+  <abstract>
+    <para>
+       Slide shows are a frequent method to transport concepts to a live
+       audience. Due to the limited space and the presence of a speaker
+       slide shows typically contain topics, together with a short description
+       and how they are related to other concepts. Exactly this kind of
+       knowledge can also be denoted in <ulink url="http://www.topicmaps.org">Topic Maps</ulink>.
+       This document describes the setup how slide shows can be generated
+       from Topic Map-encoded knowledge using a SAX handler.
+    </para>
+</abstract>
+</artheader>
+
+<section><title>Motivation</title>
+<para>
+Topic Maps have been designed to hold flat knowledge. They can contain topics, their place in an ontology (type system),
+some description and references. And they usually relationships between these topics.
+</para>
+
+<para>
+As such, they have some similarity with slide shows with the exception that these documents are presented for a particular
+purpose for a particular audience and for a particular presenter. Still, it seems inefficient to store flat knowledge
+into a slide show if it already exists in Topic Maps.
+</para>
+</section>
+
+<section><title>Overview</title>
+  <para>
+  Let us assume that we already have a number of Topic Maps and that these contain topics
+  and concepts which we would like to map into a slide show. Obviously this process cannot
+  be fully automated as 
+
+  <itemizedlist>
+    <listitem>slides have to appear in a specific order</listitem>
+    <listitem>due to size limitations of a single slide, one specific topic has to be continued on the next slide
+       </listitem>
+    <listitem>for every particular topic maybe different information is relevant</listitem>
+  </itemizedlist>
+
+  The author of the slide show must specify <emphasis>what</emphasis> he wants, while the slide generator should
+  fill in the required content from the pool of Topic Maps.
+  </para>
+
+  <para>
+  In this light, the slide generator is a TM query engine which is used to extract the
+  requested information. The query engine, though, will be specialized and tailored for the
+  generation of slides.
+  </para>
+
+  <para>
+  For obvious reasons the generated output is an XML language (called here SlideML) to allow 
+  conversion into other XML languages. The conversion is thus controlled via namespaces:
+
+   <variablelist><title>Involved Namespaces</title>
+     <varlistentry>
+	<term><literal>http://topicmaps.bond.edu.au/smile/1.0/</literal></term>
+	<listitem>Elements from this namespace define <emphasis>what</emphasis> topic information
+	    should be included for a particular topic. These elements will be detected in the intake
+	    XML instance and will be interpreted.</listitem>
+     </varlistentry>
+     <varlistentry>
+	<term><literal>http://topicmaps.bond.edu.au/SlideML/</literal></term>
+	<listitem>Elements from this namespace may or may not be in the incoming document. They
+	   will be passed transparently through the generator. In every generated slide elements
+	   from this namespace will be used to structure topic information.</listitem>
+     </varlistentry>
+   </variablelist>
+
+</para>
+
+</section>
+
+<section><title>The Intake</title>
+<para>
+The slide generator will first consult an incoming XML document about the modalities
+of the slide show. To allow for a maximum of flexibility, the generator does only process
+XML elements from the <literal>http://topicmaps.bond.edu.au/smile/1.0/</literal> namespace.
+All other elements will be passed through transparently. This allows to use the <literal>smile</literal>
+elements in any XML document whether this is now slide-oriented or not.
+</para>
+
+<section><title>The Smile Namespace</title>
+<para>
+Following incoming elements belong to the <literal>smile</literal> namespace and are detected
+by the generator:
+
+<variablelist><title>Smile Elements</title>
+  <varlistentry>
+     <term>slide</term>
+     <listitem>This signals the begin of a slide.
+  
+       <itemizedlist>
+       <listitem>The mandatory attribute is <literal>tid</literal>, which must contain a topic id. 
+		 If this particular topic does not exist in the current topic map, an error is
+		 flagged.</listitem>
+       <listitem>Optionally, the attribute <literal>format</literal> can be used to control the content of
+		 this slide.</listitem>
+       </itemizedlist>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+     <term>default</term>
+     <listitem>With this tag, default values can be set via attributes which apply to
+	 all slides which may follow this tag:
+  
+	<itemizedlist>
+	  <listitem>The value of the <literal>map</literal> attribute will be interpreted as tau expression according
+		to the CPAN package XTM::Virtual.</listitem>
+	  <listitem>The value of the <literal>format</literal> attribute will be used to control <emphasis>what</emphasis> 
+	      every slide will contain from the topic in the topic map. This format can be overridden for every individual 
+	      slide. Formats are described below.</listitem>
+	</itemizedlist>
+     </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</para>
+</section>
+
+<section><title>Formats</title>
+
+<para>
+A format string describes <emphasis>what</emphasis> exactly should be included in the generated slide.
+The default format is
+
+<programlisting>
+  "%ti %ty %rd %ins %res"
+</programlisting>
+
+and takes care that a title, types, inlines (resourceData), instances and references (occurrences)
+of that particular topic are included on a slide in that particular order.
+</para>
+
+<para>
+One format specifier is introduced with a '%' character, several such specifiers are
+separated bu one or more blanks. Following specifiers are honored:
+
+<variablelist><title>Format Specifiers</title>
+  <varlistentry>
+     <term><literal>ti</literal></term>
+     <listitem>Include a <literal>&lt;title></literal> tag containing the title of the slide. This is generated from
+     the <emphasis>baseName</emphasis> of the topic. (Sorry, no scoping yet)</listitem>
+  </varlistentry>
+
+  <varlistentry>
+     <term><literal>ty</literal> and <literal>tys</literal></term>
+     <listitem>This includes the types (<emphasis>instanceOf</emphasis>, to be exact) of the topic enclosed by a 
+         <literal>&lt;types></literal> tag. In case of <literal>ty</literal>, every <emphasis>instanceOf</emphasis>
+         is embedded with its own <literal>&lt;type></literal> tag. In case of <literal>tys</literal> all these
+         <emphasis>instanceOfs</emphasis> are concatenated to one string separated by ','.</listitem>
+  </varlistentry>
+
+  <varlistentry>
+     <term><literal>rd</literal> and <literal>rds</literal></term>
+     <listitem>This includes the <emphasis>resourceData</emphasis> occurrences enclosed by the tag 
+               <literal>&lt;inlines></literal>. In case of <literal>rd</literal>, every such occurrence is 
+               wrapped into its own tag, <literal>&lt;inline></literal>. In case of <literal>rds</literal>, 
+               all strings are concatenated into one character string (again, separated by ',').</listitem>
+  </varlistentry>
+
+  <varlistentry>
+     <term><literal>in</literal>, <literal>ins</literal>  and <literal>inrds</literal></term>
+     <listitem>This includes the instances of this topic (i.e. all topic which have an appropriate
+         <emphasis>instanceOf</emphasis> of this topic) using the tag <literal>&lt;instances></literal>. 
+         In case of <literal>in</literal>, the individual instances are wrapped into separate 
+         <literal>&lt;instance></literal> tags. In case of <literal>ins</literal>, they
+         are concatenated via ',' into one string. <literal>inrds</literal> behaves like <literal>in</literal>
+         except that for every individual instance also its <emphasis>resourceData</emphasis> is included via
+         nested <literal>&lt;description></literal> tags.
+     </listitem>
+  </varlistentry>
+
+  <varlistentry>
+     <term><literal>res</literal></term>
+     <listitem>This includes the resourceRef occurrences via a <literal>&lt;references></literal> tag. Every
+               individual occurrence is included via a <literal>&lt;reference></literal> tag. This tag is empty,
+               but contains an <literal>xlink:href</literal> attribute containing the reference link.
+     </listitem>
+  </varlistentry>
+</variablelist>
+
+</para>
+
+<para>
+Since most final slide formats have space limitations for slides, there is also a way to limit
+the number of things which are added to a particular slide. A typical scenario is to start with a topic,
+its explanation and the various instances of this topic. If that topic has too many of these instances
+to fit onto a slide, then the remaining instances can be moved to a second slide:
+
+<informalexample>
+<programlisting><![CDATA[
+  <!-- first two instances -->
+  <astma:slide astma:tid="client-side-presentation-technology" astma:format="%ti %in[1-2]"/>
+
+  <!-- same but as a followup slide, all other instances and with continue -->
+  <astma:slide astma:tid="client-side-presentation-technology" astma:format="%ti %in[3-]" astma:continue="yes"/>
+
+</slides>
+]]></programlisting>
+</informalexample>
+
+Ranges are specified via a lower and an upper bound in <literal>[n-m]</literal>. If the lower bound is omitted,
+<literal>1</literal> will be assumed. If the upper bound is omitted, then <literal>5</literal> is the default.
+</para>
+
+<para>
+Following format specifiers can have a range modifier:
+
+<itemizedlist>
+  <listitem><literal>ty</literal> and <literal>tys</literal></listitem>
+  <listitem><literal>rd</literal> and <literal>rds</literal></listitem>
+  <listitem><literal>in</literal>, <literal>ins</literal>  and <literal>inrds</literal></listitem>
+  <listitem><literal>res</literal></listitem>
+</itemizedlist>
+</para>
+
+</section>
+
+</section>
+
+<section><title>The Exhaust</title>
+<para>
+Once the slide generator has detected an element in the <literal>smile</literal> namespace,
+it will retrieve the topic information from the backend Topic Map database. As result, the
+generator will format this information into <literal>SlideML</literal> elements.
+(You can find the DTD in the appendices.)
+SlideML instances can then be converted into other formats (see Backends).
+</para>
+
+</section>
+
+<section><title>Example</title>
+<para>
+Let us assume we had a topic map covering web programming in an <ulink url="http://topicmaps.bond.edu.au/astma/">AsTMa</ulink>
+file called <filename>webprogramming.atm</filename>. A slide show can be defined via the following XML document:
+
+<informalexample>
+<programlisting><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<slides name="The Mystery Tour, 2002" 
+	xmlns = "http://topicmaps.bond.edu.au/SlideML/"
+        xmlns:astma = "http://topicmaps.bond.edu.au/astma/1.0/"
+        xmlns:smile = "http://topicmaps.bond.edu.au/smile/1.0/">
+
+  <institution>Bond University</institution>
+
+  <astma:default astma:tau_expr="file:webprogramming.atm"/> <!-- this loads the map(s) -->
+
+  <!-- first slide, no detailed specification, so the default format will be used -->
+  <astma:slide astma:tid="web-programming"/>
+
+  <!-- second slide, explicit format, first two instances -->
+  <astma:slide astma:tid="client-side-presentation-technology" astma:format="%ti %in[1-2]"/>
+
+  <!-- same but as a followup slide, all other instances -->
+  <astma:slide astma:tid="client-side-presentation-technology" astma:format="%ti %in[3-]" astma:continue="yes"/>
+
+</slides>
+]]></programlisting>
+</informalexample>
+
+The generator will remove all <literal>astma:*</literal> elements and will produce (modulo formatting):
+
+<informalexample>
+<programlisting><![CDATA[
+<slides name="The Mystery Tour, 2002" 
+	xmlns = "http://topicmaps.bond.edu.au/SlideML/"
+        xmlns:astma = "http://topicmaps.bond.edu.au/astma/1.0/"
+        xmlns:smile = "http://topicmaps.bond.edu.au/smile/1.0/">
+
+  <institution>Bond University</institution>
+
+  <!-- first slide, no detailed specification, so the default format will be used -->
+  <smile:slide smile:tid='web-programming'>
+      <smile:title>web programming</smile:title>
+      <smile:types>
+         <smile:type>programming</smile:type>
+      </smile:types>
+      <smile:inlines>
+         <smile:inline>web programming implements a particular application in a client/server scenario</smile:inline>
+      </smile:inlines>
+      <smile:instances>server side programming, client side programming</smile:instances>
+      <smile:references />
+   </smile:slide>
+ 
+  <!-- second slide, explicit format, first three instances -->
+  <smile:slide smile:tid='client-side-presentation-technology'>
+      <smile:title>client-side presentation technology</smile:title>
+      <smile:instances>
+         <smile:instance>XHTML</smile:instance>
+         <smile:instance>CSS, Cascading Style Sheets</smile:instance>
+      </smile:instances>
+  </smile:slide>
+ 
+  <!-- same but as a followup slide, all other instances -->
+  <smile:slide smile:tid='client-side-presentation-technology' smile:continue='yes'>
+      <smile:title>client-side presentation technology</smile:title>
+      <smile:instances>
+         <smile:instance>HTML4</smile:instance>
+         <smile:instance>Dynamic HTML</smile:instance>
+      </smile:instances>
+  </smile:slide> 
+
+</slides>
+]]></programlisting>
+</informalexample>
+
+This XML document can then postprocessed with various backends.
+</para>
+</section>
+
+<section><title>The Distribution</title>
+
+<para>
+The distribution consists of a Perl binary <filename>stm2sml.pl</filename> which makes use of a
+specific <ulink url="http://www.saxproject.org/">SAX processor</ulink> to perform the transformation. This
+binary comes with its own documentation, but basically it is invoked like
+
+<informalexample>
+<programlisting>
+  cat slidedefinition.stm | stm2sml.pl --urlbase=/where/are/topic/maps/ > slides.xml
+</programlisting>
+</informalexample>
+</para>
+
+
+<section><title>Backends</title>
+<para>
+Aside from transforming <literal>SlideML</literal> instances into other XML based slides presentations such as
+
+<itemizedlist>
+<listitem><ulink url="http://oeh.tu-graz.ac.at/prestimel/">Prestimel</ulink>, or</listitem>
+<listitem><ulink url="http://www.cpan.org/authors/id/J/JS/JSTENZEL/PerlPoint-Package-0.35.readme">PerlPoint</ulink></listitem>
+</itemizedlist>
+
+these instances can also be converted into HTML and PDF (via 
+<ulink url="http://www.ctan.org/">LaTeX</ulink> and 
+<ulink url="http://prosper.sourceforge.net/">Prosper</ulink>) using the <filename>Makefile</filename> in
+the <filename>backends</filename> directory. This file makes use of <literal>xsltproc</literal> which comes with the 
+<ulink url="http://www.xmlsoft.org/XSLT.html"><literal>libxslt</literal> package</ulink>.
+</para>
+
+</section>
+
+</section>
+
+
+<appendix><title>Appendix: SlideML DTD</title>
+
+
+<para>
+<informalexample>
+<programlisting><![CDATA[
+<!ELEMENT slide     (title|types|inlines|instances|references)*>
+<!ATTLIST slide     title CDATA #REQUIRED
+                    topic CDATA #REQUIRED>
+
+<!ELEMENT title     #PCDATA>
+
+<!ELEMENT types     (type+|#PCDATA)>
+<!ELEMENT type      #PCDATA>
+
+<!ELEMENT inlines   (inline+|#PCDATA)>
+<!ELEMENT inline    #PCDATA>
+
+<!ELEMENT instances (instance+|#PCDATA)>
+<!ELEMENT instance  (description|#PCDATA)>
+
+<!ELEMENT references reference+>
+<!ELEMENT reference EMPTY>
+<!ATTLIST reference href  CDATA #REQUIRED
+                    type  CDATA 'simple' #FIXED>
+
+]
+]]></programlisting>
+</informalexample>
+</para>
+</appendix>
+<!-- <bibliography> ... </bibliography> -->
+</article>

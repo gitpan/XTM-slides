@@ -1,10 +1,17 @@
-XTM::slides
+What is it?
 -----------
 
-This base package contains Perl extension interfaces for 
-generating slides from Topic Maps
+This base package contains Perl extension interfaces for generating slides (XML format)
+from Topic Maps
 
    http://www.topicmaps.org/
+
+The idea is to have the knowledge in the Topic Maps and to generate a slide show from
+there whenever necessary. This avoids that much knowledge is duplicated into slide
+documents.
+
+Installation
+------------
 
 To build the extensions, unpack this distribution somewhere, and
 exercise the usual incantation:
@@ -17,47 +24,33 @@ make install
 There are a lot of other packages we rely on, so be prepared to
 install a few; or use the cpan frontend doing that for you.
 
-Setup
------
+Dependencies
+------------
 
-Currently the setup is simple:
+This package is depending on a myriad of other Perl packages. CPAN
+is your friend.
 
-  - A Perl binary (stm2sml.pl) will be installed in the INSTALLBIN directory. 
-    Plz consult its documentation. It will read an .stm file, will read all 
-    Topic Maps mentioned therein and will generate an XML representation
-    of this slide show (yes, yet another XML language, it is described via
-    a DTD in the docs directory).
+IFF you want to make use of the backend converters (HTML, LateX, PDF),
+you will need the following packages
 
-  - After you have created this SlideML XML document you should look into the 
-    utils directory how to postprocess this for various backends. Currently the
-    package supports
+  - libxslt http://xmlsoft.org/#XSLT
 
-        - LaTeX with Prosper to produce PDF slides
+    install libxml2 and libxslt together with xsltproc.
 
-        - HTML
+  - LaTeX in full beauty (http://www.ctan.org/)
 
-    You will need XSLT support from
+  - Prosper (http://prosper.sourceforge.net/)
 
-      http://xmlsoft.org/#XSLT
+This is NOT necessary for installation.
 
-    and install libxml2 and libxslt together with xsltproc.
+Documentation
+-------------
 
-    Have a look at the Makefile there to get the idea. If you have LaTeX installed,
-    a
-
-      make http.pdf
-
-    should work.
+Plz look into the docs directory.
 
 
-Let me know whether I forgot a dependency on some other package.
-
-As many people are working on slide support for Perl, the above might change 
-readically.
-
-
-
-Copyright 2001,2002 Robert Barta
+Copyright 2001,2002 Robert Barta, rho@telecoma.net
+---------
 
 This library is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.

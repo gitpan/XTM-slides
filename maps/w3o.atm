@@ -22,6 +22,8 @@ test2 (w3c-user-interface)
 
 test3 (w3c-user-interface)
 
+test4 (w3c-user-interface)
+
 w3c-society (w3c-activity)
 bn: Society related Activity
 in: PICS, P3P, e-Commerce, DSIG, XML-SIG
