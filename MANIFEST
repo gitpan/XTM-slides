@@ -1,0 +1,17 @@
+Changes
+MANIFEST
+Makefile.PL
+bin/stm2sml.pl
+lib/XTM/STM.pm
+maps/235.atm
+maps/http.atm
+maps/test.sml
+maps/test.sml.good
+maps/test.stm
+t/01sml.t
+utils/Makefile
+utils/http.stm
+utils/prosper/bullet-glow.ps
+utils/prosper/prosper.xslt
+utils/prosper/red-bullet-on-blue.ps
+utils/prosper/rule-glow.ps

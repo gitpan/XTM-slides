@@ -1,0 +1,10 @@
+Revision history for Perl extension XTM::slides.
+
+0.02  Sat Oct 13 14:44:04 EST 2001
+	- changed test suite to Test::Simple
+
+0.01  Fri Sep 14 17:56:11 2001
+	- added XSLT sheet for the creation of prosper
+	- added XTM::STM which converts .stm into .sml files
+	- original version; created by h2xs 1.19
+

@@ -1,0 +1,26 @@
+%slide: name=Internet Technology II, 2001
+%slide: caption=Internet Technology II, 2001
+%slide: title=Internet Technology II\\Test
+%slide: author=Robert Barta
+%slide: email=rho@bond.edu.au
+%slide: institution=Bond University
+%slide: continuetext= (cont'd)
+
+%slide: map=file:235.atm
+
+web-programming
+%slide: +instances 2
+
+client-side-programming-technology
+%slide: -types
+%slide: +instances 2 (1-3)
+
+client-side-programming-technology
+%slide: continue
+%slide: -types
+%slide: +instances 2 (4-)
+
+client-side-presentation-technology
+%slide: -types
+%slide: +instances 2
+
